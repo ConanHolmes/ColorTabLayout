@@ -41,6 +41,8 @@ public class ColorClipView extends View {
 
     private int startY;//y轴开始绘制的坐标
 
+    private int baseLineY;//基线的位置
+
     private float progress;
 
 
@@ -115,7 +117,7 @@ public class ColorClipView extends View {
         setMeasuredDimension(width, height);
         Log.e("tag","七点"+(getMeasuredWidth() - getPaddingRight() - getPaddingLeft()));
         startX = (getMeasuredWidth() - getPaddingRight() - getPaddingLeft()) / 2 - textWidth / 2;
-        startY = (getMeasuredHeight() - getPaddingBottom() - getPaddingTop());
+        startY = (textHeight - getPaddingBottom() - getPaddingTop());
     }
 
     private int measureHeight(int heightMeasureSpec) {
@@ -161,15 +163,19 @@ public class ColorClipView extends View {
         Log.d("tag", "measureText=" + paint.measureText(text));
 
 
-        //通过文本的descent线与top线的距离来测量文本高度,这是其中一种测量方法
-        Paint.FontMetrics fm = paint.getFontMetrics();
-        textHeight = (int) Math.ceil(fm.descent - fm.top);
+
 
         //直接通过获得文本显示范围,再获得高度
         //参数里，text 是要测量的文字
         //start 和 end 分别是文字的起始和结束位置，textRect 是存储文字显示范围的对象，方法在测算完成之后会把结果写进 textRect。
         paint.getTextBounds(text, 0, text.length(), textRect);
         textHeight = textRect.height();
+
+        //通过文本的descent线与top线的距离来测量文本高度,这是其中一种测量方法
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        textHeight = (int) Math.ceil(fm.descent - fm.top);
+
+        baseLineY = (int) (textHeight/2 - (fm.bottom-fm.top)/2- fm.top);
     }
 
     @Override
@@ -217,7 +223,7 @@ public class ColorClipView extends View {
         canvas.save();
         Log.e("tag", "getMeasuredHeight" + getMeasuredHeight());
         canvas.clipRect(startX, 0, endX, getMeasuredHeight());
-        canvas.drawText(text, this.startX, startY, paint);
+        canvas.drawText(text, this.startX, baseLineY, paint);
         canvas.restore();
     }
 
