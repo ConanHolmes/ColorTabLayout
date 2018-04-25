@@ -48,13 +48,11 @@ public class ColorClipView extends View {
 
     public ColorClipView(Context context) {
         this(context, null);
-        Log.e("tag", "2");
     }
 
     public ColorClipView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        Log.e("tag", "1");
         //初始化各个属性包括画笔
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -115,7 +113,7 @@ public class ColorClipView extends View {
         int width = measureWidth(widthMeasureSpec);//通过模式的不同来测量出实际的宽度
         int height = measureHeight(heightMeasureSpec);//通过模式的不同来测量出实际的高度
         setMeasuredDimension(width, height);
-        Log.e("tag","七点"+(getMeasuredWidth() - getPaddingRight() - getPaddingLeft()));
+        Log.e("tag", "七点" + (getMeasuredWidth() - getPaddingRight() - getPaddingLeft()));
         startX = (getMeasuredWidth() - getPaddingRight() - getPaddingLeft()) / 2 - textWidth / 2;
         startY = (textHeight - getPaddingBottom() - getPaddingTop());
     }
@@ -163,8 +161,6 @@ public class ColorClipView extends View {
         Log.d("tag", "measureText=" + paint.measureText(text));
 
 
-
-
         //直接通过获得文本显示范围,再获得高度
         //参数里，text 是要测量的文字
         //start 和 end 分别是文字的起始和结束位置，textRect 是存储文字显示范围的对象，方法在测算完成之后会把结果写进 textRect。
@@ -175,7 +171,7 @@ public class ColorClipView extends View {
         Paint.FontMetrics fm = paint.getFontMetrics();
         textHeight = (int) Math.ceil(fm.descent - fm.top);
 
-        baseLineY = (int) (textHeight/2 - (fm.bottom-fm.top)/2- fm.top);
+        baseLineY = (int) (textHeight / 2 - (fm.bottom - fm.top) / 2 - fm.top);
     }
 
     @Override
@@ -186,18 +182,18 @@ public class ColorClipView extends View {
         Log.e("tag", "OnDraw");
         if (mDirection == DIRECTION_LEFT) {
             //绘制朝左的选中文字
-            drawHorizontalText(canvas, Color.parseColor("#ff0000"), startX,
+            drawHorizontalText(canvas, textSelectedColor, startX,
                     (int) (startX + progress * textWidth));
             //绘制朝左的未选中文字
-            drawHorizontalText(canvas, Color.parseColor("#00ff00"), (int) (startX + progress
+            drawHorizontalText(canvas, textUnselectColor, (int) (startX + progress
                     * textWidth), startX + textWidth);
         } else if (mDirection == DIRECTION_RIGHT) {
             //绘制朝右的选中文字
-            drawHorizontalText(canvas, Color.parseColor("#ff0000"),
+            drawHorizontalText(canvas, textSelectedColor,
                     (int) (startX + (1 - progress) * textWidth), startX
                             + textWidth);
             //绘制朝右的未选中文字
-            drawHorizontalText(canvas, Color.parseColor("#00ff00"), startX,
+            drawHorizontalText(canvas, textUnselectColor, startX,
                     (int) (startX + (1 - progress) * textWidth));
         } else if (mDirection == DIRECTION_TOP) {
             //绘制朝上的选中文字

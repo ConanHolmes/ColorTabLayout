@@ -42,38 +42,20 @@ public class ColorClipTabLayout extends TabLayout {
     }
 
     public ColorClipTabLayout(Context context, AttributeSet attrs) {
-        super(context, attrs, 0);
+        this(context, attrs, 0);
     }
 
     public ColorClipTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, android.support.design.R.styleable.TabLayout,
-                    defStyleAttr, android.support.design.R.style.Widget_Design_TabLayout);
-            try {
-                int tabTextAppearance = a.getResourceId(android.support.design.R.styleable.TabLayout_tabTextAppearance,
-                        android.support.design.R.style.TextAppearance_Design_Tab);
-
-                // Text colors/sizes come from the text appearance first
-                final TypedArray ta = context.obtainStyledAttributes(tabTextAppearance,
-                        android.support.v7.appcompat.R.styleable.TextAppearance);
-                try {
-                    //Tab字体大小
-                    tabTextSize = ta.getDimensionPixelSize(
-                            android.support.v7.appcompat.R.styleable.TextAppearance_android_textSize, 72);
-                    //Tab文字颜色
-                    tabTextColor = ta.getColor(
-                            android.support.v7.appcompat.R.styleable.TextAppearance_android_textColor, 0);
-                } finally {
-                    ta.recycle();
-                }
-
-                //Tab文字选中颜色
-                tabSelectedTextColor = a.getColor(android.support.design.R.styleable.TabLayout_tabSelectedTextColor, Color.BLACK);
-
-            } finally {
-                a.recycle();
-            }
+            // Text colors/sizes come from the text appearance first
+            final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ColorClipTabLayout);
+            //Tab字体大小
+            tabTextSize = ta.getDimensionPixelSize(R.styleable.ColorClipTabLayout_text_size, 72);
+            //Tab文字颜色
+            tabTextColor = ta.getColor(R.styleable.ColorClipTabLayout_text_unselected_color, Color.parseColor("#000000"));
+            tabSelectedTextColor = ta.getColor(R.styleable.ColorClipTabLayout_text_selected_color, Color.parseColor("#cc0000"));
+            ta.recycle();
         }
     }
 
@@ -83,7 +65,7 @@ public class ColorClipTabLayout extends TabLayout {
         ColorClipView colorClipView = new ColorClipView(getContext());
         colorClipView.setProgress(setSelected ? 1 : 0);
         colorClipView.setText(tab.getText() + "");
-        colorClipView.setTextSize(72);
+        colorClipView.setTextSize(tabTextSize);
         colorClipView.setTag(position);
         colorClipView.setTextSelectedColor(tabSelectedTextColor);
         colorClipView.setTextUnselectColor(tabTextColor);
@@ -210,7 +192,7 @@ public class ColorClipTabLayout extends TabLayout {
             final boolean updateText = mScrollState != SCROLL_STATE_SETTLING ||
                     mPreviousScrollState == SCROLL_STATE_DRAGGING;
             if (updateText) {
-                Log.e("tag1","positionOffset"+positionOffset);
+                Log.e("tag1", "positionOffset" + positionOffset);
                 tabLayout.tabScrolled(position, positionOffset);
             }
         }

@@ -23,7 +23,6 @@
     </declare-styleable>
 
     <declare-styleable name="ColorClipTabLayout">
-        <attr name="text" />
         <attr name="text_size" />
         <attr name="text_unselected_color" />
         <attr name="text_selected_color" />
